@@ -18,6 +18,7 @@ public:
     void add(int k, int x);
     int get(int k);            // Returns the value of the kth element.
     void remove(int k);        // Deletes the kth element from the list.
+    int searchMF (int x);
     
 private:
     Node *head;                // Points to the first node.
@@ -63,25 +64,43 @@ int list::get(int k) {
 
 void list::remove(int k) {
     if (k == 1) {
-        Node *temp = head; // Store the current head node.
-        head = head->next; // Update the head pointer to point to the next node.
-        delete temp; // Delete the previous head node.
-        length--; // Decrement the length of the list.
+        Node *temp = head;
+        head = head->next;
+        delete temp;
+        length--;
         return;
     }
-    Node *temp = head; // Store the head node.
+    Node *temp = head;
     // Traverse to the (k-1)th node.
-    for (int i = 1; i < k - 1; i++) { // Traverse to the (k-1)th node.
-        temp = temp->next; // Move to the next node.
+    for (int i = 1; i < k - 1; i++) {
+        temp = temp->next;
     }
-    Node *toDelete = temp->next; // Store the node to be deleted.
-    temp->next = toDelete->next; //node 5 now points to node 7
-    delete toDelete; // Delete the node.
+    Node *toDelete = temp->next;
+    temp->next = toDelete->next;
+    delete toDelete;
     length--;
 }
     
+int list::searchMF(int x){ //this returns the position in the list of element x
+    Node *temp = head; 
+    int pos = 1;
+    while (temp != nullptr){
+        if (temp->value == x){
+            //we now need to move this to the head of the list
+            add(1, x);
+            remove(pos+1);
+            return pos;
+        }
+        temp = temp->next;
+        pos++;
+    }
+
+    return 0;
+}
+
 int main(){
     int N, X, K;
+    int sum = 0;
     scanf("%d", &N); // Read number of insertions.
     list L;
     for (int i = 0; i < N; i++){
@@ -89,12 +108,12 @@ int main(){
         L.add(K, X);
     }
     int M;
-    scanf("%d", &M); // Read number of deletions.
+    scanf("%d", &M); // Read number of searches
     for (int i = 0; i < M; i++){
         scanf("%d", &K);
-        L.remove(K);
+        sum += L.searchMF(K); //sum the position of the element K in the list
     }
     scanf("%d", &K); // Read query position.
-    printf("%d %d\n", L.size(), L.get(K));
+    printf("%d\n", sum);
     return 0;
 }
