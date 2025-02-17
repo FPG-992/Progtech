@@ -216,3 +216,7 @@ class bstree {
 
         return 0;
     }
+
+// Inorder: Left, Node, Right
+// Preorder: Node, Left, Right
+// Postorder: Left, Right, Node 
